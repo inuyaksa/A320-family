@@ -307,7 +307,19 @@ canvas.LineSymbol.draw = func() {
 	me.callback("draw_after");
 };
 
-# RacetrackSymbol
+# RacetrackSymbol - define a new Map Symbol
+
+canvas.RacetrackSymbol = {
+	parents:[Symbol],
+	element_id: nil,
+	needs_update: 1,
+    # Static/singleton:
+	makeinstance: func(name, hash) {
+		if (!isa(hash, LineSymbol))
+			__die("LineSymbol: OOP error");
+		return Symbol.add(name, hash);
+	}
+};
 
 canvas.RacetrackSymbol.new = func(group, layer, model, controller=nil) {
 	if (me == nil) __die("Need me reference for RacetrackSymbol.new()");

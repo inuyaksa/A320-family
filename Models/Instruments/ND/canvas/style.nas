@@ -461,7 +461,7 @@ canvas.NDStyles["Airbus"] = {
 			options: {
 				hold_node: "/autopilot/hold/",
 				hold_init: "/autopilot/hold/init", #NOT EXISTS??
-				hold_direction: "/autopilot/hold/hold-direction"
+				hold_direction: "/autopilot/hold/hold-direction",
 				points_node: "autopilot/auto-hold/point",
 				first_point_node: "autopilot/hold/entry", #CHECKME
 				hold_wp: "autopilot/hold/fix",

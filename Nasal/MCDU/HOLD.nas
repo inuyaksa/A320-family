@@ -28,13 +28,13 @@ var holdPage = {
 	computer: nil,
 	inbcrs: nil,
     turn:"R",	
-	modified:false,
-	holdingfix:false,
+	modified:0,
+	holdingfix:0,
 	new: func(computer, waypoint) {
 		var hp = {parents:[holdPage]};
 		hp.computer = computer;
 		hp.waypoint = waypoint;
-		hp.holdingfix = (waypoint.fly_type == "Hold") ? true : false;
+		hp.holdingfix = (waypoint.fly_type == "Hold") ? 1 : 0;
 		hp._setupPageWithData();
 		hp.updateTmpy();
 		return hp;
@@ -122,7 +122,7 @@ var holdPage = {
 			var wp = createWP(wpfix.wp_lat(), wpfix.wp_lon(), wpfix.wp_name~"*");
 			if (wp != nil) {
 				wp.fly_type = "Hold";
-				wp.hold_is_left_handed = (me.turn == "L") ? true : false;
+				wp.hold_is_left_handed = (me.turn == "L") ? 1 : 0;
 				wp.hold_inbound_radial_deg = (me.inbcrs != nil) ? me.inbcrs : wpfix.leg_bearing;
 				fmgc.flightPlanController.flightplans[i].addWPToPos(wp,wpidx+1);
 				wp = fmgc.flightPlanController.flightplans[i].getWP(wpidx+1); # get new holding wp
@@ -163,7 +163,7 @@ var holdPage = {
 			} else {
 				return nil;
 			}
-		else if (btn == "R1") {
+		} else if (btn == "R1") {
 			if (!me.holdingfix) {
 				me.makeTmpy();
 				me.holdingfix = me.addHoldingFix(i,me.waypoint);

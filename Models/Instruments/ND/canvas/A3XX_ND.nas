@@ -24,6 +24,7 @@ var DotSym = canvas.DotSym;
 var Map = canvas.Map;
 var SVGSymbol = canvas.SVGSymbol;
 var LineSymbol = canvas.LineSymbol;
+var RacetrackSymbol = canvas.LineSymbol;
 var StyleableCacheable = canvas.StyleableCacheable;
 var SymbolCache32x32 = canvas.SymbolCache32x32;
 var SymbolCache = canvas.SymbolCache;
