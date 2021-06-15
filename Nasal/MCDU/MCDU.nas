@@ -207,6 +207,14 @@ var setMode = func(will) {
 
 var lskbutton = func(btn, i) {
 	page = pageNode[i].getValue();
+
+	if (page == "HOLD") {
+	  var next = canvas_mcdu.onButtonSelected("R"~btn,i);
+	  if (next == nil) mcdu_message(i, "NOT ALLOWED");
+	  else if (size(next)>=3) pageNode[i].setValue(next);
+	  return;
+	}
+
 	if (btn == "1") {
 		if (page == "MCDU") {
 			if (getprop("/MCDU[" ~ i ~ "]/atsu-active") == 1) {
@@ -269,7 +277,7 @@ var lskbutton = func(btn, i) {
 				pageNode[i].setValue("DEPARTURE");
 			} else {
 				mcdu_message(i, "NOT ALLOWED");
-			}
+			}		
 		} else if (page == "F-PLNA" or page == "F-PLNB") {
 			canvas_mcdu.myFpln[i].pushButtonLeft(1);
 		} else if (page == "DIRTO") {
@@ -907,6 +915,14 @@ var lskbutton = func(btn, i) {
 
 var rskbutton = func(btn, i) {
 	page = pageNode[i].getValue();
+
+	if (page == "HOLD") {
+	  var next = canvas_mcdu.onButtonSelected("R"~btn,i);
+	  if (next == nil) mcdu_message(i, "NOT ALLOWED");
+	  else if (size(next)>=3) pageNode[i].setValue(next);
+	  return;
+	}
+
 	if (btn == "1") {
 		if (page == "INITA") {
 			initInputA("R1",i);

@@ -26,10 +26,15 @@ var holdPage = {
 	vector: [],
 	index: nil,
 	computer: nil,
+	inbcrs: nil,
+    turn:"R",	
+	modified:false,
+	holdingfix:false,
 	new: func(computer, waypoint) {
 		var hp = {parents:[holdPage]};
 		hp.computer = computer;
 		hp.waypoint = waypoint;
+		hp.holdingfix = (waypoint.fly_type == "Hold") ? true : false;
 		hp._setupPageWithData();
 		hp.updateTmpy();
 		return hp;
@@ -63,8 +68,13 @@ var holdPage = {
 			me.R2 = ["DATABASE ", nil, "yel"];
 			me.arrowsMatrix[1][1] = 0;
 		} else {
-			me.L1 = [" 100", "INB CRS", "blu"];
-			me.L2 = [" R", " TURN", "blu"];
+			if (me.inbcrs == nil) me.L1 = [" [   ]g", "INB CRS", "blu"];
+			else me.L1 = [sprintf(" %03.0fg", me.inbcrs), "INB CRS", "blu"];
+			if (me.turn == "L") {
+				me.L2 = [" L", " TURN", "blu"];
+			} else {
+				me.L2 = [" R", " TURN", "blu"];
+			}
 			if (pts.Instrumentation.Altimeter.indicatedFt.getValue() >= 14000) {
 				me.L2 = [" 1.5/----", "TIME/DIST", "blu"];
 			} else {
@@ -101,5 +111,71 @@ var holdPage = {
 			me.titleColour = "wht";
 			canvas_mcdu.pageSwitch[me.computer].setBoolValue(0);
 		}
+	},
+
+	addHoldingFix: func(i,wpfix) {
+
+        var wp = nil;
+
+		var wpidx = fmgc.flightPlanController.flightplans[i].indexOfWP(wpfix);
+		if (wpidx == -1) {
+			var wp = createWP(wpfix.wp_lat(), wpfix.wp_lon(), wpfix.wp_name~"*");
+			if (wp != nil) {
+				wp.fly_type = "Hold";
+				wp.hold_is_left_handed = (me.turn == "L") ? true : false;
+				wp.hold_inbound_radial_deg = (me.inbcrs != nil) ? me.inbcrs : wpfix.leg_bearing;
+				fmgc.flightPlanController.flightplans[i].addWPToPos(wp,wpidx+1);
+				wp = fmgc.flightPlanController.flightplans[i].getWP(wpidx+1); # get new holding wp
+				#wp.setAltitude(me.waypoint.alt_cstr,"computed");
+				wp.setAltitude(fmgc.FMGCInternal.altSelected,"computed"); # CHECKME - desidered alt
+				
+				var requestedkts = 230; # below FL140
+				if (getprop("/it-autoflight/input/spd-managed")) {
+					requestedkts = (fmgc.Input.ktsMach.getValue()) ? math.floor(getprop("/it-autoflight/input/mach") * 661.4708) : int(getprop("/it-autoflight/input/kts")); 
+				} else {
+					if (fmgc.FMGCInternal.altSelected >= 20000) requestedkts = 265;
+					else if (fmgc.FMGCInternal.altSelected >= 14000) requestedkts = 240;
+				}
+				wp.setSpeed(requestedkts,"computed");
+			}
+		}
+		
+		return wp;
+
+	},
+
+	onButtonSelected: func(btn,i) {
+
+		var scratchpad = mcdu_scratchpad.scratchpads[i].scratchpad;		
+
+		if (btn == "L1") {		
+			if (scratchpad == "CLR") {
+				me.inbcrs = nil;
+			} else {
+				var ci = math.mod(int(scratchpad),360);
+				if (ci != i) return nil;
+				me.inbcrs = ci;
+			}
+		}
+		else if (btn == "L2") {
+			if (scratchpad == "L" or scratchpad == "R") {
+				me.turn = scratchpad;
+			} else {
+				return nil;
+			}
+		else if (btn == "R1") {
+			if (!me.holdingfix) {
+				me.makeTmpy();
+				me.holdingfix = me.addHoldingFix(i,me.waypoint);
+				if (me.holdingfix != nil) {
+					canvas_mcdu.myHold[i].del();
+					canvas_mcdu.myHold[i] = holdPage.new(i,wp);
+					return "HOLD";
+				}
+			}
+		}
+		else return nil;
+
+		return "1";
 	}
 };

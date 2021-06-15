@@ -5129,6 +5129,7 @@ var canvas_MCDU_base = {
 					me.dynamicPageFunc(myLatRev[i].L6, "Simple_L6");
 					
 					me.colorLeft(myLatRev[i].L1[2],myLatRev[i].L2[2],myLatRev[i].L3[2],myLatRev[i].L4[2],myLatRev[i].L5[2],myLatRev[i].L6[2]);
+					me["Simple_L4S"].setColor(myLatRev[i].arrowsColour[0][3]); # subtext uses some color as arrow
 						
 					me.dynamicPageFunc(myLatRev[i].R1, "Simple_R1");
 					me.dynamicPageFunc(myLatRev[i].R2, "Simple_R2");

@@ -104,10 +104,12 @@ var latRev = {
 				if (me.wpt != nil) {
 					me.subtitle = [dmsToString(sprintf(me.wpt.lat), "lat"), dmsToString(sprintf(me.wpt.lon), "lon")];
 				}
+				me.L2 = [" OFFSET", nil, "wht"];
 				me.L3 = [" HOLD", nil, "wht"];
 				me.L4 = [" ALTN", " ENABLE", "blu"];
 				me.L6 = [" RETURN", nil, "wht"];
 				me.R1 = ["FIX INFO ", nil, "wht"];
+				me.R2 = ["[    ]°/[   ]°/[  ]", "LL XING/INCR/NO", "blu"];
 				me.R3 = ["[        ]", "NEXT WPT  ", "blu"];
 				me.R4 = ["[     ]", "NEW DEST", "blu"];
 				me.R5 = ["AIRWAYS ", nil, "wht"];
