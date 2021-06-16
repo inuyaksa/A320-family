@@ -636,7 +636,6 @@ var masterFMGC = maketimer(0.2, func {
 		}
 	} elsif (FMGCInternal.phase == 1) {
 		if (gear0) {
-
 			if ((n1_left < 85 or n1_right < 85) and gs < 90 and mode == " ") { # rejected takeoff
 				newphase = 0;
 				systems.PNEU.pressMode.setValue("GN");
@@ -680,7 +679,6 @@ var masterFMGC = maketimer(0.2, func {
 		if (alt >= accel_agl_ft) { # todo when insert altn or new dest
 			newphase = 2;
 		}
-
 	}
 
 
