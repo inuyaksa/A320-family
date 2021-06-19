@@ -265,6 +265,8 @@ var FMGCNodes = {
 	v1: props.globals.initNode("/FMGC/internal/v1", 0, "DOUBLE"),
 	v1set: props.globals.initNode("/FMGC/internal/v1-set", 0, "BOOL"),
 	phase: props.globals.initNode("/FMGC/internal/phase", 0, "INT"),
+	vlsMin: props.globals.initNode("/FMGC/internal/vls-min", 0, "DOUBLE"),
+	vmax: props.globals.initNode("/FMGC/internal/vmax", 0, "DOUBLE"),
 };
 
 ############
@@ -704,8 +706,6 @@ var masterFMGC = maketimer(0.2, func {
 		FMGCNodes.phase.setValue(newphase);
 	}
 	
-
-
 	############################
 	# fuel
 	############################
